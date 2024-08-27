@@ -57,7 +57,7 @@ pipeline {
                             fi
                         """
                     } else {
-                        sh "mkdir -p ${BASE_PATH}/upper ${BASE_PATH}/work ${BASE_PATH}/merged"
+                        sh "mkdir -p ${SHARED_WORKSPACE_PATH} ${BASE_PATH}/upper ${BASE_PATH}/work ${BASE_PATH}/merged"
                         sh """
                             if ! mountpoint -q ${BASE_PATH}/merged; then
                                 sudo mount -t overlay overlay -olowerdir=${SHARED_WORKSPACE_PATH},upperdir=${BASE_PATH}/upper,workdir=${BASE_PATH}/work ${BASE_PATH}/merged
@@ -179,21 +179,20 @@ pipeline {
 	    success {
 	        script {
 	            setBuildStatus("Build succeeded", "SUCCESS");
-	                sh "sudo umount -l ${BASE_PATH}/merged"
+	            sh "sudo umount -l ${BASE_PATH}/merged"
 	            if (getCurrentBranch() != 'main') {
-	                sh "sudo rm -rf ${BASE_PATH}/upper ${BASE_PATH}/work"
+//	                sh "sudo rm -rf ${BASE_PATH}/upper ${BASE_PATH}/work"
 	            }
 	        }
 	    }
 	    failure {
 	        script {
 	            setBuildStatus("Build failed", "FAILURE");
+                sh "sudo umount -l ${BASE_PATH}/merged"
 	            if (getCurrentBranch() == 'main') {
-	                sh "sudo umount -l ${BASE_PATH}/merged"
-	                sh "sudo rm -rf ${SHARED_WORKSPACE_PATH}"
+//	                sh "sudo rm -rf ${SHARED_WORKSPACE_PATH}"
 	            } else {
-	                sh "sudo umount -l ${BASE_PATH}/merged"
-	                sh "sudo rm -rf ${BASE_PATH}/upper ${BASE_PATH}/work"
+//	                sh "sudo rm -rf ${BASE_PATH}/upper ${BASE_PATH}/work"
 	            }
 	        }
 	    }
