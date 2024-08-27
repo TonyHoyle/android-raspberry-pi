@@ -188,7 +188,7 @@ pipeline {
 	    failure {
 	        script {
 	            setBuildStatus("Build failed", "FAILURE");
-                sh "sudo umount -l ${BASE_PATH}/merged"
+//                sh "sudo umount -l ${BASE_PATH}/merged"
 	            if (getCurrentBranch() == 'main') {
 //	                sh "sudo rm -rf ${SHARED_WORKSPACE_PATH}"
 	            } else {
